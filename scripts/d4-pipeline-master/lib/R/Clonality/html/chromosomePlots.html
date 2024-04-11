@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Per-chromosome plots of the copy number arrays from a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for chromosomePlots {Clonality}"><tr><td>chromosomePlots {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Per-chromosome plots of the copy number arrays  from a particular patient
+</h2>
+
+<h3>Description</h3>
+
+<p>The function produces a sequence of plots for each chromosome with one-step segmented data  of all samples of a particular patient.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+chromosomePlots(data.seg1, ptlist, ptname,nmad)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data.seg1</code></td>
+<td>
+
+<p>Output of one-step segmentation - output OneStepSeg of clonality.analysis(). 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptlist</code></td>
+<td>
+
+<p>Vector of the patient IDs in the order of the samples appearing in the data.  For example, if the first three tumors  belong to patient A, and the following two belong to patient B, then ptlist=c('ptA', 'ptA', 'ptA', 'ptB', 'ptB'). 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptname</code></td>
+<td>
+
+<p>Name of the patient from ptlist for which the data should be plotted</p>
+</td></tr>
+<tr valign="top"><td><code>nmad</code></td>
+<td>
+
+<p>Number of MADs (median absolute deviations) that is used for Gain/Loss calls. Used to mark the Gain/Loss threshold on the plots.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+ 
+<p>The function produces a sequence of plots  for each chromosome with one-step segmented data of all samples of a particular patient. The dotted horizontal lines denote the gain and loss thresholds.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ # See example as in clonality.analysis()
+   
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

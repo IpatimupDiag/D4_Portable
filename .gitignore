@@ -1,0 +1,6 @@
+# ignore .git and .snakemake #
+.git
+.snakemake
+
+# ignore Rplots #
+Rplots.pdf

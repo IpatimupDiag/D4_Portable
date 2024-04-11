@@ -1,0 +1,16 @@
+exportPattern("^[[:alpha:]]+")
+
+import(gtools)
+import(impute)
+import(limma)
+import(MASS)
+import(QDNAseq)
+
+
+export("dewaveBins")
+export("createNormalCalibration")
+
+#NoWaves
+export("CorrectTumors")
+export("CorTumNorm")
+export("SmoothNormals")

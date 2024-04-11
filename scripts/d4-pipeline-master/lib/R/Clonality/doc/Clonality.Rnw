@@ -1,0 +1,230 @@
+%\VignetteIndexEntry{Clonality}
+%\VignetteDepends{DNAcopy}
+%\VignetteKeywords{Clonality testing}
+%\VignettePackage{Clonality}
+%\VignetteDepends{DNAcopy, gdata, Clonality}
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+\SweaveOpts{echo=FALSE}
+
+\setlength{\textheight}{8.5in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.25in}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\evensidemargin}{0.25in}
+
+\begin{document}
+\setkeys{Gin}{width=0.99\textwidth}
+
+
+\title{\bf Clonality: A Package for Clonality testing}
+
+\author{Irina Ostrovnaya}
+
+\maketitle
+
+\begin{center}
+Department of Epidemiology and Biostatistics\\
+Memorial Sloan-Kettering Cancer Center\\
+{\tt ostrovni@mskcc.org}\\
+\end{center}
+
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+
+This document presents an overview of the {\tt Clonality} package. This
+package can be used to test whether two tumors are clonal (metastases) or independent (double primaries) using their copy number or loss of heterozygosity (LOH) profiles. For LOH data it implements Concordant Mutations (CM) test \citep{begg07} and Likelihood Ratio (LR) test \citep{lrloh}. For copy number profiles the package implements the methodology based on the likelihood ratio described in \citep{cghSM}.
+
+
+\section{Copy number profiles}
+
+We will show how to test independence of the copy number profiles from the same patient using simulated data. First we simulate the dataset with 10 pairs of tumors with 22 chromosomes, 100 markers each. Simulated log-ratios are equal to signal + noise. The signal is defined in the following way: each chromosome has 50\% chance to be normal, 30\% to be whole-arm loss/gain, and 20\% to be partial arm loss/gain, where endpoints are drawn at random, and loss/gain means are drawn from standard normal distribution. There are no chromosomes with recurrent losses/gains. Noise is drawn from normal distribution with mean 0, standard deviation 0.4 and added to the signal. First 9 patients have independent tumors, while last patient has two tumors with identical signal, but independent noise.
+
+<<read data, echo=TRUE,print=FALSE>>=
+ library(Clonality)
+set.seed(100)
+chrom<-paste("chr",rep(c(1:22),each=100),"p",sep="")
+chrom[nchar(chrom)==5]<-paste("chr0",substr(chrom[nchar(chrom)==5] ,4,5),sep="")
+maploc<- rep(c(1:100),22)
+data<-NULL
+for (pt in 1:9)  #first 9 patients have independent tumors
+{
+tumor1<-tumor2<- NULL
+mean1<- rnorm(22) 
+mean2<- rnorm(22)
+for (chr in 1:22)
+{ 
+  r<-runif(2) 
+if (r[1]<=0.5) tumor1<-c(tumor1,rep(0,100))   
+  else if   (r[1]>0.7)  tumor1<-c(tumor1,rep(mean1[chr],100))
+  else  { i<-sort(sample(1:100,2))
+        tumor1<-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+if (r[2]<=0.5) tumor2<-c(tumor2,rep(0,100))
+  else if   (r[2]>0.7)  tumor2<-c(tumor2,rep(mean2[chr],100))
+  else   {i<-sort(sample(1:100,2))
+       tumor2<-c(tumor2,mean2[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+         }
+}
+data<-cbind(data,tumor1,tumor2)
+}
+
+#last patient has identical profiles
+tumor1<- NULL
+mean1<- rnorm(22) 
+for (chr in 1:22)
+{ 
+  r<-runif(1) 
+if (r<=0.4) tumor1<-c(tumor1,rep(0,100))   
+  else if   (r>0.6)  tumor1<-c(tumor1,rep(mean1[chr],100))
+  else  { i<-sort(sample(1:100,2))
+        tumor1<-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+
+}
+data<-cbind(data,tumor1,tumor1)
+
+data<-data+matrix(rnorm( 44000,mean=0,sd=0.4) ,nrow=2200,ncol=20)
+
+
+samnms<-paste("pt",rep(1:10,each=2),rep(1:2,10),sep=".")
+
+@ 
+
+         
+
+Rows of data correspond to probes (genomic markers). The first column is the chromosome and the second column is probe's genomic position. All subsequent columns correspond to the samples and contain log-ratios. Here the genomic is an index, but normally it would be actual probe's location along the genome, and then 'splitChromosomes' function should be used to divide the chromosome into p and q arms, thus increasing the number of independent units for the analysis.
+
+
+ 
+<<echo=TRUE,print=TRUE>>=
+dim(data)
+@ 
+ 
+As the next step of data preparation, we have to create a CNA (copy number array) object as described DNAcopy. 
+<<CNA, echo=TRUE,print=FALSE>>= 
+
+dataCNA<-CNA(data,chrom=chrom,maploc=maploc,sampleid=samnms)
+as.matrix(dataCNA)[1:5,1:10]
+
+@
+
+Our methodology allows at most one genomic change per chromosome arm, estimated by the one-step Circular Binary Segmentation (CBS) algorithm (\citep{cbs2}). 
+
+
+If the data had many more than 15,000 markers, most outstanding, and likely a short change would be picked up, which would not be representative of the chromosome pattern. To avoid this, one can use the following function:
+
+<<averaging, echo=TRUE,print=FALSE>>=
+dataAve<- ave.adj.probes(dataCNA,2)
+@
+
+Here we have averaged every two consecutive markers. For this dataset, though, averaging is not necessary.
+
+
+
+Next we have to create a vector of patient labels that matches the samples.
+<<echo=TRUE,print=FALSE>>= 
+ptlist<- paste("pt",rep(1:10,each=2),sep=".")
+@
+
+Finally, we can run the clonality analysis:
+<<main clonality analysis, echo=TRUE,print=FALSE>>= 
+results<-clonality.analysis(dataCNA, ptlist,  pfreq = NULL, refdata = NULL, nmad = 1,  reference = TRUE, allpairs = TRUE)
+@
+
+The main information is in the output LR:
+<<echo=TRUE,print=TRUE>>= 
+results$LR
+@  
+ 
+The likelihood ratios LR2 for patients 1:9 are much smaller than 1, therefore these tumors are independent. Patient 10 has LR2 much higher than one, and we can conclude that this patient's tumors are clonal. The reference distribution for LR2 under the hypothesis of independence is constructed  by pairing tumors from different patients that are independent by default. The p-value column reflects the percentiles of a particular patient's LR2 in the reference distribution: clonal tumors would have small p-values.
+ 
+           
+We can view the genomewide plots of patient  10 using: 
+
+<<genomewidePlots, fig=TRUE, echo=TRUE>>=
+genomewidePlots(results$OneStepSeg, results$ChromClass,ptlist , c("pt.10.1", "pt.10.2"),results$LR,  plot.as.in.analysis = TRUE) 
+@
+
+Patterns for each chromosome would be plotted by:
+<<fig=TRUE,echo=TRUE>>=
+chromosomePlots(results$OneStepSeg, ptlist,ptname="pt.10",nmad=1)
+@
+ 
+
+The overlap between the histograms of LR2 from original pairs of tumors and the reference distribution are produced by:
+<<fig=TRUE, echo=TRUE>>=
+histogramPlot(results$LR[,4], results$refLR[,4])
+@
+
+\subsection{Choice of segmentation algorithm}
+Note that the user can potentially  specify the segmentation method to be used. Currently the default behavior of the clonality.analysis function is to use the CBS
+algorithm to identify the most significant change in each chromosome arm. The
+internal function for this purpose is "oneseg" called as oneseg(x, alpha, nperm, sbdry)
+
+There are 4 arguments to oneseg:\\
+
+     x:  is the finite logratio data ordered by genomic position.  \\
+ alpha:  the significance level used by CBS.                    \\
+ nperm:  the number of permutations for the reference distribution.     \\
+ sbdry:  early stopping boundary for declaring no change 
+             (calculated from alpha and nperm).          \\
+
+The output of this function is a vector of 3 numbers where the first is the
+number of change-points detected (must be 0, 1 or 2), and the second and the
+third numbers are the start and end of the left segment if there is only one
+change-point, and of the middle segment when there are 2 change-points.
+
+The function allows the user to specify alternative alpha and nperm for 'oneseg' as
+a list using the segpar argument e.g. segpar=list(alpha=0.05, nperm=1000). 
+Since sbdry is always calculated in clonality.analysis function from alpha and
+nperm it is not specified.
+
+Alternate segmentation algorithm can be used. It requires the user to create a
+function that takes the ordered logratio from one chromosome arm as argument "x" as in oneseg. The name
+of this function should not be 'oneseg' and is passed through the 'segmethod' argument and all other
+necessary arguments that are needed passed as a list through 'segpar' argument.
+
+
+\section{LOH data}
+
+
+The LOH data has to be combined in a matrix where first column has  marker names and the following columns have LOH calls for each sample.
+Here we simulate a dataset with 10 pairs of tumors and 20 markers. First pair of tumor is clonal, and the rest of them are independent. If the marker is heterozygous and there is no LOH, then it is denoted by 0. LOH at maternal or paternal alleles is marked by 1 or 2.
+
+<<LOH data generation, echo=TRUE,print=FALSE>>= 
+set.seed(25)
+LOHtable<-cbind(1:20,matrix(sample(c(0,1,2),20*20,replace=TRUE),20))
+LOHtable[,3]<-LOHtable[,2]
+LOHtable[1,3]<-0
+@
+
+<<LOH data analysis, echo=TRUE,print=TRUE>>= 
+LOHtable[,1:5]
+LOHclonality(LOHtable,rep(1:10,each=2),pfreq=NULL,noloh=0,loh1=1,loh2=2)
+@
+
+First p-value is small, indicating clonality, for both CM and LR tests. The rest of the p-values are not significant.
+
+Markers that are not informative (e.g. homozygous) in a particular tumor should be given NA instead of a call. Such markers will be dropped from the analysis of this specific patient.
+
+\section{LOH data for 3 and more tumors}
+It is possible to test clonality of 3 or more tumors using Extended Concordant Mutations test, implemented  in function 'ECMtesting'. The input LOH matrix can be in the same format as for 'LOHclonality' function: first column of a matrix contains marker names, subsequent columns are samples.  For each patient all possible subsets of tumors are tested for clonality, with adjustment for multiple  comparison performed using permutation MinP procedure.
+
+Likelihood model can be extended for 3 or 4 tumors with function 'LRtesting3or4tumors'. The likelihood function depends on 2 parameters  for 3 tumors, and 3 parameters for 4 tumors, allowing for non-symmetric relationship among tumors. Likelihood ratio test is computed and p-value is calculated using permutations. 
+
+
+Below are the details of the session information:
+<<sessionInfo, echo=FALSE>>= 
+sessionInfo()
+@     
+
+\bibliographystyle{apalike}
+\bibliography{Clonality}
+
+\end{document}

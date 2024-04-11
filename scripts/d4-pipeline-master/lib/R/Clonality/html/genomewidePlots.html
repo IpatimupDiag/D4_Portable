@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot of the genomewide copy number profiles of a pair of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for genomewidePlots {Clonality}"><tr><td>genomewidePlots {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Plot of the genomewide copy number profiles of a pair of tumors.
+</h2>
+
+<h3>Description</h3>
+
+<p>Plot contains genomewide profiles from a pair of tumors. It uses the output from the function clonality.analysis().
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+genomewidePlots(data.seg1, classall, ptlist, ptpair, ptLR, plot.as.in.analysis = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data.seg1</code></td>
+<td>
+
+<p>Output of one-step segmentation - output OneStepSeg of clonality.analysis().  The chromosomes should be in the format &quot;chr01p&quot;, &quot;chr01q&quot; etc.
+</p>
+</td></tr>
+<tr valign="top"><td><code>classall</code></td>
+<td>
+
+<p>Classifications of the chromosomes  - output ChromClass of clonality.analysis()
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptlist</code></td>
+<td>
+
+<p>Vector of the patient IDs in the order of the samples appearing in the data. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptpair</code></td>
+<td>
+
+<p>Two sample names for which the plot is desired</p>
+</td></tr>
+<tr valign="top"><td><code>ptLR</code></td>
+<td>
+
+<p>Matrix with the likelihood ratios -  output LR of clonality.analysis()
+</p>
+</td></tr>
+<tr valign="top"><td><code>plot.as.in.analysis</code></td>
+<td>
+
+<p>If TRUE then the gain/loss  patterns  will be highlighted in accordance with the chromosome classification.  For example, if there are three segments in a chromosome, then the middle one determines the chromosome status. If it is normal, no color will be plotted in the chromosome even if the 1st and 3rd segments are gains or losses. Another example: if there are 2 or 3 different segments of gains, they will be combined and only one segment will be plotted. If plot.as.in.analysis is equal to FALSE, the original one-step CBS segmentation will be plotted.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Function produces genomewide plots of a pair of tumors.  The log-ratios are plotted in grey in the order of their genomic locations, gains are plotted in blue, and losses are plotted in red.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ # See example as in clonality.analysis()
+   
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

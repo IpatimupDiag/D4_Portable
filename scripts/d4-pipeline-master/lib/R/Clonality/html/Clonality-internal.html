@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Internal Clonality functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Clonality-internal {Clonality}"><tr><td>Clonality-internal {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Internal Clonality functions</h2>
+
+<h3>Description</h3>
+
+<p>Internal functions of package Clonality.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+LRpv(tum, pp,nref)
+LRts (tum,p, MX)
+tumors(p,cc,m)
+refvector(p,cc,m,nref=1000)
+CM.pvalue(rw)
+calc.freq(pfreq,refdata, classall,nmad,segmethod,segpar) 
+calculateLR(data.seg1,classall,ptlist,pfreq,reference,allpairs=TRUE,gainthres,lossthres,segmethod,segpar)
+segment1(xcna,segmethod,segpar)
+oneseg(x, alpha, nperm, sbdry) 
+get.oneseg.bdry(alpha,nperm)
+GL(seg,nmad)
+func(ss1,ss2)
+complexts(s1,s2,maplocs)
+indiv.test(ss1,ss2,func,gainthres,lossthres,Nsim=100,segmethod,segpar)
+grantLR(tum1,tum2,p,pi,pc,cvalue=0.5,rescale=TRUE,prnfile=NULL,nm=NULL,chrlist)
+class.all(seg1)
+prettyplot(datseg,path,nm,lab.general="",t1lab="Tumor 1",t2lab="Tumor 2",
+many=TRUE,gains=NULL,losses=NULL)
+
+
+
+
+</pre>
+
+
+<h3>Details</h3>
+
+<p>These are not to be called directly by the user</p>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

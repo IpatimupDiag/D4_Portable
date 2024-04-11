@@ -1,0 +1,10 @@
+QDNAseq.hg19-package    Package QDNAseq.hg19
+hg19.1000kbp.SR50       Hg19 1000kbp bin annotations
+hg19.100kbp.SR50        Hg19 100kbp bin annotations
+hg19.10kbp.SR50         Hg19 10kbp bin annotations
+hg19.15kbp.SR50         Hg19 15kbp bin annotations
+hg19.1kbp.SR50          Hg19 1kbp bin annotations
+hg19.30kbp.SR50         Hg19 30kbp bin annotations
+hg19.500kbp.SR50        Hg19 500kbp bin annotations
+hg19.50kbp.SR50         Hg19 50kbp bin annotations
+hg19.5kbp.SR50          Hg19 5kbp bin annotations

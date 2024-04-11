@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Clonality testing using copy number data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for clonality.analysis {Clonality}"><tr><td>clonality.analysis {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>  Clonality testing using copy number data
+</h2>
+
+<h3>Description</h3>
+
+<p>Function to test clonality of two tumors from the same patient based on their genomewide copy number profiles. This function calculates likelihood ratios and the reference distribution  under the hypothesis of independence.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+clonality.analysis(data, ptlist, pfreq = NULL, refdata = NULL, nmad = 1.25, reference = TRUE, allpairs = TRUE,segmethod="oneseg", segpar=NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+
+<p>Copy Number Array object (output of function CNA() from package DNAcopy). First column contains chromosomes, second column contains genomic locations. Each remaining column contains log-ratios from a particular tumor or sample. Chromosomes X and Y should be removed prior to analysis, and chromosomes should be split into p and q arms to improve the power (use function splitChromosomes()).
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptlist</code></td>
+<td>
+
+<p>Vector of the patient IDs in the order of the samples appearing in the data.  For example, if the first three tumors (columns 3, 4, 5 of data) belong to patient A, and the following two (columns 6, 7 of data) belong to patient B, then ptlist=c('ptA', 'ptA', 'ptA', 'ptB', 'ptB'). Note that while sample names in data should be unique the ptlist should have repeated labels.
+</p>
+</td></tr>
+<tr valign="top"><td><code>pfreq</code></td>
+<td>
+
+<p>Marginal frequencies of Gains, Losses and Normals for all the chromosomes. If it is not known, pfreq should be set to NULL and frequencies will be estimated from all the samples in the dataset.  If frequencies are known, pfreq should be a data frame with 4 columns: 1) chromosome arm in the format 'chr01p', probability of 2) gain, 3) loss and 4) normal.
+</p>
+</td></tr>
+<tr valign="top"><td><code>refdata</code></td>
+<td>
+
+<p>If available,  additional cohort of patients with the same disease that should be used to estimate the marginal gain/loss frequencies. If NULL, the original set of tumors is used, otherwise, refdata should be a CNA object. It will be segmented with 1 step CBS and each chromosome will be classified as gain/loss as described in the manuscript, leading to frequency estimates. No averaging or chromosome splitting is done for this dataset, so users should make sure refdata has chromosomes in the format 'chr01p' and that its resolution is similar to the one of the original data.
+</p>
+</td></tr>
+<tr valign="top"><td><code>nmad</code></td>
+<td>
+
+<p>Number of MADs (median absolute deviations) that is used for Gain/Loss calls.  For each array MAD of its residuals (that is, data minus segmentation means) is calculated. Residuals  represent the array's noise revel. Any segment of this array that has a mean at least nmad MADs above or below array's median is called a gain or a loss. We use value of 1.25, while values in the range of 0.5 to 2 can also be admissible depending on the resolution and presence of artifacts.
+</p>
+</td></tr>
+<tr valign="top"><td><code>reference</code></td>
+<td>
+
+<p>If TRUE the reference distribution of likelihood ratios is created under  hypothesis of independence by pairing (independent) tumors from different patients.
+</p>
+</td></tr>
+<tr valign="top"><td><code>allpairs</code></td>
+<td>
+
+<p>If TRUE  all possible pairs of tumors from different patients will be used for reference distribution. If two tumors in a pair are not  exchangeable, for example primary tumor  vs recurrence, or pre-cancerous lesion vs tumor, then allpairs should be set to FALSE and the 'first' tumor should always come earlier in the data before the 'second' tumor for all the patients. Then 'first' tumors of patients will only be paired with 'second' tumors of other patients for the reference distribution.
+</p>
+</td></tr>
+<tr valign="top"><td><code>segmethod</code></td>
+<td>
+
+<p>The segmentation algorithm to be used. The default is &quot;oneseg&quot; which
+uses the built in function of the same name based on the CBS
+algorithm. An alternative segmentation algorithm can be used. A function
+should be created and the name passed as described in the vignette.
+</p>
+</td></tr>
+<tr valign="top"><td><code>segpar</code></td>
+<td>
+
+<p>The parameters necessary for the segmentation algorithm as a list. For
+&quot;oneseg&quot; you can specify alpha (default = 0.01) and nperm (default =
+2000) necessary for the CBS algorithm.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The function implements the statistical procedure designed to distinguish whether the two tumors from the same patient are clonal (have the same progenitor cancer cell) or independent (developed from normal cells independently). At first  data are segmented with one step CBS (Olshen, A. B., Venkatraman, E. S., Lucito, R., Wigler, M. (2004). Circular binary segmentation for the analysis of array-based DNA copy number data. Biostatistics 5: 557-572) that picks at most one copy number change per chromosome arm. Then each chromosome arm is classified as Gain/Loss/Normal based  on a middle segment if there are 3 segments, or  based  on the most outstanding segment if there are 2 segments. The multinomial likelihood ratio comparing these classifications is computed (LR1). For each concordant partial arm gain or loss  we also calculate likelihood ratio that this change is exactly the same in both tumors. These likelihood ratios are multiplied by LR1 to obtain our final statistic, LR2. If LR2 is much greater than 1, that indicates clonality. If LR2 is much smaller than 1, it indicates independence. The reference distribution of LR2 under the hypothesis of independence is obtained  by pairing up tumors from different patients, which are independent by default.
+</p>
+<p>Since only one gain/loss is admissible per chromosome arm it is highly recommended to apply this methodology to arrays with at most 10,000-15,000 markers.  We suggest averaging  blocks of consecutive probes for arrays with larger resolution, see function ave.adj.probes.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If the reference is TRUE, function returns the list with 4 elements: LR, OneStepSeg, ChromClass, refLR.
+</p>
+<p>LR - matrix with the within patient comparisons. Each row corresponds to a pair of samples being compared. Columns are:
+Sample1 - name of sample 1;
+Sample2 - name of sample 2;
+LR1 - likelihood ratio without comparisons of specific concordant gains/losses;
+LR2  - final likelihood ratio with individual comparisons;
+GGorLL - number of chromosome arms that are classified as Gains in both tumors or Losses in both tumors;
+NN    - number of chromosome arms  that are classified as Normal in both tumors;
+GL     - number of chromosome arms  that are classified as Gain in one tumors and Loss in another;
+GNorLN    -  number of chromosome arms  that are classified as Gain(Loss) in one tumors and Normal in another;
+IndividualComparisons     - list of chromosome arms that had comparisons of specific concordant gains/losses in both tumors and the corresponding likelihood ratio for them being exactly the same.
+p-value - quantile of the reference distribution under the null hypothesis (refLR$LR2) that the value of LR2 match.
+</p>
+<p>OneStepSeg  - is the output of one step  segmentation of the data. It has the same structure as the output of 'segment' from DNAcopy, but only one most prominent change per arm is allowed. 
+</p>
+<p>ChromClass  - is the matrix of chromosome classifications based on the one step segmentation. Rows correspond to chromosome arms, columns correspond to samples. Chromosome arms are classified by the middle segment if there are 3 segments, and by the most outstanding segment if there are 2 segments.
+</p>
+<p>refLR - matrix with the between patient comparisons (reference distribution under the hypothesis of independence). Has the same structure as LR but the pairs of tumors are selected from different patients.
+</p>
+<p>Note that calculating the reference distribution might take a long time.
+</p>
+<p>If the  reference is FALSE,  there is no p-value column in LR and no refLR output.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Irina Ostrovnaya <a href="mailto:ostrovni@mskcc.org">ostrovni@mskcc.org</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>Ostrovnaya, I., Olshen, A. B., Seshan, V.E., Orlow, I., Albertson, D. G. and Begg, C. B. (2010), A metastasis or a second independent 
+cancer? Evaluating the clonal origin of tumors using array copy number data. Statistics in Medicine, 29: 1608-1621
+</p>
+<p>Ostrovnaya, I. and Begg, C.  Testing Clonal Relatedness of Tumors Using Array Comparative Genomic Hybridization: A Statistical Challenge Clin Cancer Res March 1, 2010 16:1358-1367
+</p>
+<p>Venkatraman, E. S. and Olshen, A. B. (2007). A faster circular binary segmentation algorithm for the analysis of array CGH data. 
+Bioinformatics, 23:657 63.
+</p>
+<p>Olshen, A. B., Venkatraman, E. S., Lucito, R., Wigler, M. (2004). Circular binary segmentation for the analysis of array-based DNA copy
+number data. Biostatistics 5: 557-572.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+#Analysis of simulated data
+
+ 
+#Simulate the dataset with 10 pairs of tumors with 22 chromosomes, 100 markers each
+#Simulated log-ratios are equal to signal + noise
+#Signal: each chromosome has 50% chance to be normal, 30% to be whole-arm loss/gain, and 20% to be partial arm loss/gain, where endpoints are drawn at random, loss/gain means are drawn from normal distribution
+#There are no chromosomes with recurrent losses/gains
+#Noise: drawn from normal distribution with mean 0, standard deviation 0.4
+#First 9 patients have independent tumors, last patient has two tumors with identical signal, independent noise
+
+
+set.seed(100)
+chrom&lt;-paste("chr",rep(c(1:22),each=100),"p",sep="")
+chrom[nchar(chrom)==5]&lt;-paste("chr0",substr(chrom[nchar(chrom)==5] ,4,5),sep="")
+maploc&lt;- rep(c(1:100),22)
+data&lt;-NULL
+for (pt in 1:9)  #first 9 patients have independent tumors
+{
+tumor1&lt;-tumor2&lt;- NULL
+mean1&lt;- rnorm(22) 
+mean2&lt;- rnorm(22)
+for (chr in 1:22)
+{ 
+  r&lt;-runif(2) 
+if (r[1]&lt;=0.5) tumor1&lt;-c(tumor1,rep(0,100))   
+  else if   (r[1]&gt;0.7)  tumor1&lt;-c(tumor1,rep(mean1[chr],100))
+  else  { i&lt;-sort(sample(1:100,2))
+        tumor1&lt;-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+if (r[2]&lt;=0.5) tumor2&lt;-c(tumor2,rep(0,100))
+  else if   (r[2]&gt;0.7)  tumor2&lt;-c(tumor2,rep(mean2[chr],100))
+  else   {i&lt;-sort(sample(1:100,2))
+       tumor2&lt;-c(tumor2,mean2[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+         }
+}
+data&lt;-cbind(data,tumor1,tumor2)
+}
+
+#last patient has identical profiles
+tumor1&lt;- NULL
+mean1&lt;- rnorm(22) 
+for (chr in 1:22)
+{ 
+  r&lt;-runif(1) 
+if (r&lt;=0.4) tumor1&lt;-c(tumor1,rep(0,100))   
+  else if   (r&gt;0.6)  tumor1&lt;-c(tumor1,rep(mean1[chr],100))
+  else  { i&lt;-sort(sample(1:100,2))
+        tumor1&lt;-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+
+}
+data&lt;-cbind(data,tumor1,tumor1)
+
+data&lt;-data+matrix(rnorm( 44000,mean=0,sd=0.4) ,nrow=2200,ncol=20)
+dataCNA&lt;-CNA(data,chrom=chrom,maploc=maploc,sampleid=paste("pt",rep(1:10,each=2),rep(1:2,10)))
+ptlist&lt;- paste("pt",rep(1:10,each=2),sep=".")
+samnms&lt;-paste("pt",rep(1:10,each=2),rep(1:2,10),sep=".")
+results&lt;-clonality.analysis(dataCNA, ptlist,  pfreq = NULL, refdata = NULL, nmad = 1, 
+ reference = TRUE, allpairs = TRUE)
+
+
+              
+#genomewide plots of pairs of tumors from the same patient
+pdf("genomewideplots.pdf",height=7,width=11)
+for (i in unique(ptlist))
+{
+w&lt;-which(ptlist==i) 
+ns&lt;- length(w)
+if (ns&gt;1)
+{
+for (p1 in c(1:(ns-1)))
+for (p2 in c((p1+1):ns))
+genomewidePlots(results$OneStepSeg, results$ChromClass,ptlist , ptpair=samnms[c(w[p1],w[p2])],results$LR,  plot.as.in.analysis = TRUE) 
+}
+}
+dev.off()
+
+
+
+pdf("hist.pdf",height=7,width=11)
+histogramPlot(results$LR[,4], results$refLR[,4])
+dev.off()
+
+
+for (i in unique(ptlist))
+{
+pdf(paste("Patient", i,".pdf",sep=""),height=7,width=11)
+chromosomePlots(results$OneStepSeg, ptlist,ptname=i,nmad=1.25)
+dev.off()
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

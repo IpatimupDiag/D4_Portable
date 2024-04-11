@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Chromosome splitting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for splitChromosomes {Clonality}"><tr><td>splitChromosomes {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Chromosome splitting
+</h2>
+
+<h3>Description</h3>
+
+<p>Divides the chromosomes into p and q arms.   </p>
+
+
+<h3>Usage</h3>
+
+<pre>
+splitChromosomes(chrom,maploc)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>chrom</code></td>
+<td>
+
+<p>Vector of chromosomes. They should be numeric 1 to 22.
+</p>
+</td></tr>
+<tr valign="top"><td><code>maploc</code></td>
+<td>
+
+<p>Vector of genomic locations. They should be in Kilobases. 
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The function returns the vector of chromosome arms labeled &quot;chr01p&quot;, &quot;chr01q&quot;, etc. The split into arms is accomplished using the following  centers (in Kb) for  chromosomes 1 through 22: (122356.96,  93189.90,  92037.54 , 50854.87  ,47941.40,  60438.12 , 59558.27,  45458.05 , 48607.50,  40434.94 , 52950.78,  35445.46 ,      16934.00,  16570.00,  16760.00 , 36043.30 , 22237.13,  16082.90  ,      28423.62 , 27150.40,  11760.00, 12830.00 ). 
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+#simulated data
+ 
+set.seed(100)
+chrom&lt;-rep(c(1:22),each=100)
+maploc&lt;- runif(2200)* 200000
+chromarm&lt;-splitChromosomes(chrom,maploc)
+ 
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

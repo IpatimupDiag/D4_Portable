@@ -1,0 +1,12 @@
+export("ave.adj.probes","chromosomePlots","clonality.analysis","genomewidePlots","histogramPlot","LOHclonality", "splitChromosomes","ECMtesting","LRtesting3or4tumors")
+
+importFrom(DNAcopy, CNA)
+
+importFrom(grDevices, dev.interactive, dev.off, pdf)
+
+importFrom(graphics, abline, arrows, axis, hist, lines, mtext, par,
+           plot, points, text)
+
+importFrom(stats, density, mad, median, optim, optimize, runif)
+
+importFrom(utils, write.table)

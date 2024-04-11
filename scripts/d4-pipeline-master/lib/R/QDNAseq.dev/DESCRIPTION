@@ -1,0 +1,23 @@
+Package: QDNAseq.dev
+Type: Package
+Title: What the Package Does (Title Case)
+Version: 0.1
+Date: 2015-08-13
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: This package contains experimental new features which at
+    some point in time might be incorporated into QDNAseq.
+License: What license is it under?
+LazyData: TRUE
+Depends: QDNAseq, Clonality
+RemoteType: github
+RemoteHost: api.github.com
+RemoteRepo: QDNAseq.dev
+RemoteUsername: tgac-vumc
+RemoteRef: clonality
+RemoteSha: 0ef369cad000ff8f204469936768b5774fd7d46c
+GithubRepo: QDNAseq.dev
+GithubUsername: tgac-vumc
+GithubRef: clonality
+GithubSHA1: 0ef369cad000ff8f204469936768b5774fd7d46c
+Built: R 3.2.1; ; 2017-02-19 11:24:35 UTC; unix

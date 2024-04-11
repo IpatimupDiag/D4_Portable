@@ -1,0 +1,18 @@
+Clonality-package       Clonality testing
+ECMtesting              Clonality testing of >=3 tumors using Extended
+                        Concordant Mutations (ECM) test based on LOH
+                        (Loss of Heterozygosity) profiles
+LOHclonality            Clonality testing using LOH (Loss of
+                        Heterozygosity) profiles
+LRtesting3or4tumors     Clonality testing of 3 or 4 tumors using
+                        Likelihood model based on LOH (Loss of
+                        Heterozygosity) profiles
+ave.adj.probes          Averaging of adjacent probes in copy number
+                        arrays
+chromosomePlots         Per-chromosome plots of the copy number arrays
+                        from a particular patient
+clonality.analysis      Clonality testing using copy number data
+genomewidePlots         Plot of the genomewide copy number profiles of
+                        a pair of tumors.
+histogramPlot           Histrograms of Log-Likelihood Ratios
+splitChromosomes        Chromosome splitting

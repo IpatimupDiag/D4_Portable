@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Clonality testing of &gt;=3 tumors using Extended Concordant...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ECMtesting {Clonality}"><tr><td>ECMtesting {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Clonality testing of &gt;=3 tumors using Extended Concordant Mutations (ECM) test based on LOH (Loss of Heterozygosity) profiles
+</h2>
+
+<h3>Description</h3>
+
+<p>Function to test clonality of three and more tumors from the same patient based on their LOH profiles. This function implements Extended Concordant Mutations for all possible subsets of tumors from the same patient and minP multiplicity adjustment using simulated tumors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ECMtesting(LOHtable,ptlist,noloh,loh1,loh2,Nsim=100)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>LOHtable</code></td>
+<td>
+
+<p>Matrix of LOH  calls. Each row corresponds to a marker. First column contains the names of the markers. Each other column represents a sample and contains LOH calls. 
+</p>
+</td></tr>
+<tr valign="top"><td><code>ptlist</code></td>
+<td>
+
+<p>Vector of the patient IDs in the order the samples appear in the data. For example, if the first three tumors (columns 2, 3, 4 of data) belong to patient A, and the following two (columns 5, 6 of data) belong to patient B, then ptlist=c('ptA', 'ptA', 'ptA', 'ptB', 'ptB').
+</p>
+</td></tr>
+<tr valign="top"><td><code>noloh</code></td>
+<td>
+
+<p>The string or a number that denotes absence of LOH.
+</p>
+</td></tr>
+<tr valign="top"><td><code>loh1</code></td>
+<td>
+
+<p>The string or a number that denotes presence of LOH.
+</p>
+</td></tr>
+<tr valign="top"><td><code>loh2</code></td>
+<td>
+
+<p>The string or a number that denotes presence of LOH that is discordant from loh1.
+</p>
+</td></tr>
+<tr valign="top"><td><code>Nsim</code></td>
+<td>
+
+<p>Number of simulations used to calculate minP adjusted p-values</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Extended Concordant Mutations test is done for every subset of tumors. It uses number of concordant mutations in all tumors of the subset as a test statistic, and its reference distribution is calculated assuming fixed  counts of LOH per tumor and equal probability of maternal and paternal alleles being affected. Note that ECM test for 2 tumors and original CM test will give slightly different p-values since continuity correction is done in ECM test.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The function returns a list with number of elements equal to the number of patients. Each element is a matrix with two rows: ECM p-values for all possible subsets of tumors from this patient, and minP adjusted p-values. The tumors are denoted 1,2,3,... in the order they appear in LOHtable. Any tumor subsets with minP adjusted p-value &lt;=0.05 can be considered clonal.
+</p>
+
+
+<h3>References</h3>
+
+<p> Ostrovnaya, I. &quot;Testing clonality of three and more tumors using their loss of heterozygosity profiles&quot;, Statistical Applications in Genetics and Molecular Biology, 2012
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+set.seed(25)
+LOHtable&lt;-cbind(1:15,matrix(sample(c(0,1,2),15*12,replace=TRUE),ncol=12))
+ECMtesting(LOHtable,rep(1:3,each=4),noloh=0,loh1=1,loh2=2,Nsim=100)
+  </pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

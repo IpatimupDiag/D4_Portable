@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Averaging of adjacent probes in copy number arrays</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ave.adj.probes {Clonality}"><tr><td>ave.adj.probes {Clonality}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Averaging of adjacent probes in copy number arrays
+</h2>
+
+<h3>Description</h3>
+
+<p>For each sample the log-ratios at each consecutive K number of probes are averaged.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ave.adj.probes(data, K)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+
+<p>Copy Number Array object (output of function CNA() from the package DNAcopy). First column contains chromosomes, second column contains genomic locations. Each remaining column contains log-ratios from a particular tumor or sample.
+</p>
+</td></tr>
+<tr valign="top"><td><code>K</code></td>
+<td>
+
+<p>Number of markers to be averaged. Should be selected so that the final resolution of the averaged data would be 5,000-10,000 markers.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Averages log-ratios in every K consecutive markers. The purpose of this step is to reduce the noise in the data, eliminate possible very small germline copy number variations, and get rid of a possible wave effect.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns CNA object of reduced resolution
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Same example as in clonality.analysis()
+
+set.seed(100)
+chrom&lt;-rep(c(1:22),each=100)
+maploc&lt;- runif(2200)* 200000
+chromarm&lt;-splitChromosomes(chrom,maploc)
+ 
+ 
+#Simulate the dataset with 10 pairs of tumors with 22 chromosomes, 100 markers each
+#Simulated log-ratios are equal to signal + noise
+#Signal: each chromosome has 50% chance to be normal, 30% to be whole-arm loss/gain, and 20% to be partial arm loss/gain, where endpoints are drawn at random, loss/gain means are drawn from normal distribution
+#There are no chromosomes with recurrent losses/gains
+#Noise: drawn from normal distribution with mean 0, standard deviation 0.25
+#First 9 patients have independent tumors, last patient has two tumors with identical signal, independent noise
+
+
+set.seed(100)
+chrom&lt;-paste("chr",rep(c(1:22),each=100),"p",sep="")
+chrom[nchar(chrom)==5]&lt;-paste("chr0",substr(chrom[nchar(chrom)==5] ,4,5),sep="")
+maploc&lt;- rep(c(1:100),22)
+data&lt;-NULL
+for (pt in 1:9)  #first 9 patients have independent tumors
+{
+tumor1&lt;-tumor2&lt;- NULL
+mean1&lt;- rnorm(22) 
+mean2&lt;- rnorm(22)
+for (chr in 1:22)
+{ 
+  r&lt;-runif(2) 
+if (r[1]&lt;=0.5) tumor1&lt;-c(tumor1,rep(0,100))   
+  else if   (r[1]&gt;0.7)  tumor1&lt;-c(tumor1,rep(mean1[chr],100))
+  else  { i&lt;-sort(sample(1:100,2))
+        tumor1&lt;-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+if (r[2]&lt;=0.5) tumor2&lt;-c(tumor2,rep(0,100))
+  else if   (r[2]&gt;0.7)  tumor2&lt;-c(tumor2,rep(mean2[chr],100))
+  else   {i&lt;-sort(sample(1:100,2))
+       tumor2&lt;-c(tumor2,mean2[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+         }
+}
+data&lt;-cbind(data,tumor1,tumor2)
+}
+
+#last patient has identical profiles
+tumor1&lt;- NULL
+mean1&lt;- rnorm(22) 
+for (chr in 1:22)
+{ 
+  r&lt;-runif(1) 
+if (r&lt;=0.4) tumor1&lt;-c(tumor1,rep(0,100))   
+  else if   (r&gt;0.6)  tumor1&lt;-c(tumor1,rep(mean1[chr],100))
+  else  { i&lt;-sort(sample(1:100,2))
+        tumor1&lt;-c(tumor1,mean1[chr]*c(rep(0,  i[1]),rep(1, i[2]-i[1]), rep(0,  100-i[2])))
+        }
+
+}
+data&lt;-cbind(data,tumor1,tumor1)
+
+data&lt;-data+matrix(rnorm( 44000,mean=0,sd=0.4) ,nrow=2200,ncol=20)
+dataCNA&lt;-CNA(data,chrom=chrom,maploc=maploc,sampleid=paste("pt",rep(1:10,each=2),rep(1:2,10)))
+dim(dataCNA)
+dataCNA2&lt;-ave.adj.probes(dataCNA, 2)
+dim(dataCNA2)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Clonality</em> version 1.16.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

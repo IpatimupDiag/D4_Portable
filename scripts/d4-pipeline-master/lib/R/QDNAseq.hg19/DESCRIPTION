@@ -1,0 +1,17 @@
+Package: QDNAseq.hg19
+Type: Package
+Title: QDNAseq bin annotation for hg19
+Version: 1.6.0
+Date: 2015-09-30
+Author: Daoud Sie [aut, cre]
+Maintainer: Daoud Sie <d.sie@vumc.nl>
+Description: This package provides QDNAseq bin annotations for the
+        human genome build hg19.
+Depends: R (>= 3.2.1), QDNAseq
+biocViews: ExperimentData, OrganismData, Homo_sapiens_Data
+License: GPL
+URL: https://github.com/tgac-vumc/QDNAseq.hg19
+BugReports: https://github.com/tgac-vumc/QDNAseq.hg19/issues
+NeedsCompilation: no
+Packaged: 2017-04-26 14:19:39 UTC; biocbuild
+Built: R 3.4.0; ; 2018-07-08 07:55:37 UTC; unix
