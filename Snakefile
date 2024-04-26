@@ -39,6 +39,8 @@ elif setting == "test_run": # FOR A TEST RUN, STOPS AT rule QDNAseq_segment !!!
     rule test_run:
         input:
             expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES),
+            #expand(DIR_OUT + "{binSize}kbp/data/{binSize}kbp-NOdeWave_segmented.rds",binSize=BINSIZES), #get segmented profiles before deWave
+            #expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES) #OUTDATED Comment: to compare with and without deWaving
             #expand(DIR_OUT + "{binSize}kbp/ACE/{ploidy}N/segmentfiles/{sample}_segments.tsv", binSize=ACEBINSIZES, ploidy=config["ACE"]["ploidies"], sample=SAMPLES.keys()),
             #expand(DIR_OUT + "{binSize}kbp/data/{binSize}kbp-called.rds",binSize=BINSIZES)
 elif setting == "research": #rule research
@@ -109,6 +111,36 @@ rule deWave:
     script:
         "scripts/Run_deWave.R"
 
+#edited, 18/04/2024:
+
+rule QDNAseq_segment_before_deWave:
+    input:
+        dewaved=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-corrected.rds",
+    output:
+        segmented=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-NOdeWave_segmented.rds",
+        allprofiles=expand(DIR_OUT + "{{binSize}}kbp/profiles/NOdeWave_segmented/{samples}.png",samples=SAMPLES.keys()),
+        copynumbers=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-copynumbers-NOdeWave.igv",
+        segments=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-segments-NOdeWave.igv",
+        copynumbersbed=expand(DIR_OUT + "{{binSize}}kbp/BED/{samples}-copynumbers-NOdeWave.bed",samples=SAMPLES.keys()),
+        segmentsbed=expand(DIR_OUT + "{{binSize}}kbp/BED/{samples}-segments-NOdeWave.bed",samples=SAMPLES.keys()),
+    params:
+        profiles=DIR_OUT + "{binSize}kbp/profiles/NOdeWave_segmented/",
+        failed=DIR_OUT + "{binSize}kbp/failed_samples.txt",
+        minimal_used_reads=config["QDNAseq"]["minimal_used_reads"],
+        copynumbersbed=DIR_OUT + "{binSize}kbp/BED/%s-copynumbers-NOdeWave.bed",
+        segmentsbed=DIR_OUT + "{binSize}kbp/BED/%s-segments-NOdeWave.bed",
+        bedfolder=DIR_OUT + "{binSize}kbp/BED/",
+        suppressMessages=config["pipeline"]["suppressMessages"]
+        #
+        #alpha=config["QDNAseq"]["seg_alpha"],
+        #undoSD=config["QDNAseq"]["seg_undoSD"]
+    log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/segment-NOdeWave.log"
+    script:
+        "scripts/Run_QDNAseq_segment.R"
+
+#/edited, 
+
+
 rule QDNAseq_segment:
     input:
         dewaved=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-dewaved.rds" if config['QDNAseq']['dewave'] else DIR_OUT + "{binSize}kbp/data/{binSize}kbp-corrected.rds",
@@ -126,7 +158,10 @@ rule QDNAseq_segment:
         copynumbersbed=DIR_OUT + "{binSize}kbp/BED/%s-copynumbers.bed",
         segmentsbed=DIR_OUT + "{binSize}kbp/BED/%s-segments.bed",
         bedfolder=DIR_OUT + "{binSize}kbp/BED/",
-        suppressMessages=config["pipeline"]["suppressMessages"]
+        suppressMessages=config["pipeline"]["suppressMessages"],
+        #
+        seg_alpha=config["QDNAseq"]["seg_alpha"],
+        seg_undoSD=config["QDNAseq"]["seg_undoSD"]
     log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/segment.log"
     script:
         "scripts/Run_QDNAseq_segment.R"

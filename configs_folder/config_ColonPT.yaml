@@ -4,7 +4,7 @@ pipeline:
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
 path:
-  dir_bam: "../IPATIMUP_data/tests/test_colon/" # "../TGAC_data/CNP24-001_testH/bam/" # NEW MAIN-INPUT !!!
+  dir_bam: "../IPATIMUP_data/tests/test_colon/" # NEW MAIN-INPUT !!!
   dir_out: "../IPATIMUP_data/tests/testResults/tRColon02/"  # directory where the output should be created, all other directories below are branches of this directory
   #
   dir_stats: "stats/"

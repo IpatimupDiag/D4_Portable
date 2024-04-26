@@ -4,8 +4,8 @@ pipeline:
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
 path:
-  dir_bam: "../IPATIMUP_data/tests/test_colon/" # "../TGAC_data/CNP24-001_testH/bam/" # NEW MAIN-INPUT !!!
-  dir_out: "../IPATIMUP_data/tests/testResults/tRColon02/"  # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "../IPATIMUP_data/tests/ready_testing/testLung_NL/bam/" # NEW MAIN-INPUT !!!
+  dir_out: "../IPATIMUP_data/tests/testResults/tR06/Lung_NL/"  # directory where the output should be created, all other directories below are branches of this directory
   #
   dir_stats: "stats/"
   dir_log: "log/"
@@ -15,17 +15,17 @@ summary:
 
 
 QDNAseq:
-  BINSIZES: ["100", "1000"]   #required binsizes comma seperated  1 5 10 15 30 100 1000
+  BINSIZES: ["15", "30", "100", "1000"]   #required binsizes comma seperated  1 5 10 15 30 100 1000
   genome: hg19
   chrom_filter: ["Y", "X"] # comma separated quoted to specify which chromosomes to filter out. "X","Y"
-  dewave: False #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
+  dewave: True #False #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
   dewave_dir: scripts/QDNAseq.dev-dewave/R
   dewave_data: scripts/QDNAseq.dev-dewave/data/NormalCalibrationSet_{binSize}kb.rda
   #dewave_data: data/NormalCalibrationSet_{binSize}kb.rda
   minimal_used_reads: 100000
   minimum_cellularity: 0.2  # minimum cellularity used for calling, a to low cellularity cause over calling.
-  seg_alpha: 1e-10 #1e-50 # 1e-10 #adjust in case of over-segmentation
-  seg_undoSD: 1  #1.5 # 1 #adjust in case of over-segmentation
+  seg_alpha: 1e-20 #1e-10 #1e-50 # 1e-10 #adjust in case of over-segmentation
+  seg_undoSD: 0.1 #1 #1.5 # 1 #adjust in case of over-segmentation
 
 ACE:
   ploidies: [2] # [2,4]   #required ploidies comma seperated

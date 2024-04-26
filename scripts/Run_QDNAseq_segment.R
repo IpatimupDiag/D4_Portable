@@ -29,22 +29,41 @@ copynumbers<-snakemake@output[["copynumbers"]]
 segments<-snakemake@output[["segments"]]
 bedfolder <- snakemake@params[["bedfolder"]]
 
+#edited, 19/04/2024:
+alph <- as.numeric(snakemake@params[["seg_alpha"]])
+SDundo <- snakemake@params[["seg_undoSD"]]
+#/edited
+
+
 log<-snakemake@log[[1]]
 log<-file(log, open="wt")
 sink(log, append=TRUE , split=FALSE)
 
 # Adjust segmentation settings based on binsize
-if (bin==15) {SDundo=0.75; alph=1e-15}
-if (bin==30) {SDundo=0.75; alph=1e-15}
-if (bin==100) {SDundo=0.10; alph=1e-20} # default = 1e-20 # 0.01 used for PELLL_FS8_a0.01
-if (bin==1000) {SDundo=0.10; alph=1e-20}
+#if (bin==15) {SDundo=0.75; alph=1e-15}
+#if (bin==30) {SDundo=0.75; alph=1e-15}
+#if (bin==100) {SDundo=0.10; alph=1e-20} # default = 1e-20 # 0.01 used for PELLL_FS8_a0.01
+#if (bin==1000) {SDundo=0.10; alph=1e-20}
+
 # TODO: mogelijk hogere alpha nodig, om meer segmenten te krijgen: 0.01 (1e-2). Deze setting used in tmp_100kbp
 
 # load data
 QCN.fcnsd <- readRDS(dewaved)
 
-QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], undo.splits='sdundo', undo.SD=SDundo, alpha=alph, transformFun="sqrt") # gives 'Performing segmentation: NA
+#edited, 16/04/2024
+
+QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], alpha=alph, undo.SD=SDundo)
+
+# Best results so far:
+#QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads], alpha=1e-50, undo.SD=1.5)
+
+#QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads])
+
+#original
+#QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], undo.splits='sdundo', undo.SD=SDundo, alpha=alph, transformFun="sqrt") # gives 'Performing segmentation: NA
+
 QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds)
+
 saveRDS(QCN.fcnsdsn, segmented)
 
 ##############################################################################################################
@@ -66,6 +85,7 @@ write.table(littledata, file=failed )
 # Create IGV objects and bedfiles from readcounts
 ##############################################################################################################
 
+#16/04/2024, edited:
 exportBins(QCN.fcnsdsn, copynumbers, format="igv", type="copynumber")
 exportBins(QCN.fcnsdsn, segments, format="igv", type="segments")
 exportBins(QCN.fcnsdsn, file=copynumbersbed, format="bed", logTransform=TRUE, type="copynumber")
