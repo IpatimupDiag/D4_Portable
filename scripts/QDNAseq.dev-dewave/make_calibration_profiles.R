@@ -22,7 +22,7 @@ sourceDir("R/") # get deWave local lib
 
 
 #Normals input directory
-in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_pack1/"
+in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
 
 #Bin size !!!
 # Change for the disired bin size.
