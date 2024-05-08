@@ -4,8 +4,8 @@ pipeline:
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
 path:
-  dir_bam: "../IPATIMUP_data/tests/ready_testing/testColon/bam/" # "../TGAC_data/CNP24-001_testH/bam/" # NEW MAIN-INPUT !!!
-  dir_out: "../IPATIMUP_data/tests/testResults_newCalibrationPCK1/tRColon/"  # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "../TGAC_data/CNP24-001/bam/" # "../TGAC_data/CNP24-001_testH/bam/" # NEW MAIN-INPUT !!!
+  dir_out: "../IPATIMUP_data/tests/testResults/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
   #
   dir_stats: "stats/"
   dir_log: "log/"
@@ -18,10 +18,9 @@ QDNAseq:
   BINSIZES: ["100", "1000"]   #required binsizes comma seperated  1 5 10 15 30 100 1000
   genome: hg19
   chrom_filter: ["Y", "X"] # comma separated quoted to specify which chromosomes to filter out. "X","Y"
-  dewave: True #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
+  dewave: False #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
   dewave_dir: scripts/QDNAseq.dev-dewave/R
-  dewave_data: scripts/QDNAseq.dev-dewave/data_ionTurrent/NormalCalibrationSet_{binSize}kb.rda  
-          #scripts/QDNAseq.dev-dewave/data/NormalCalibrationSet_{binSize}kb.rda
+  dewave_data: scripts/QDNAseq.dev-dewave/data/NormalCalibrationSet_{binSize}kb.rda
   #dewave_data: data/NormalCalibrationSet_{binSize}kb.rda
   minimal_used_reads: 100000
   minimum_cellularity: 0.2  # minimum cellularity used for calling, a to low cellularity cause over calling.
