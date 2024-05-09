@@ -1,4 +1,4 @@
-name: QDNAseq-snakemake_testdummy
+name: D4_Portable_BETA
 channels:
   - conda-forge
   - bioconda

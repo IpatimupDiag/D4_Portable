@@ -7,7 +7,7 @@ MAINTAINER Ze_Pedro
 RUN git clone https://github.com/jppmatos/D4_Portable/
 
 #Set path to work within the packages setup
-WORKDIR /QDNAseq.snakemake
+WORKDIR /D4_Portable
 
 #install packages from yaml-file
 RUN conda config --set channel_priority flexible
