@@ -27,6 +27,7 @@ renv::install("bioc::DNAcopy@1.72.3")
 devtools::install_github("tgac-vumc/WECCA",force=TRUE)
 
 # install QDNAseq.dev
+devtools::install_github("tgac-vumc/QDNAseq.dev", ref="clonality",force=TRUE)
 #devtools::install_github("tgac-vumc/QDNAseq.dev@clonality", force=TRUE)
 #devtools::install_github("tgac-vumc/QDNAseq.dev", ref="clonality",force=TRUE)
 
