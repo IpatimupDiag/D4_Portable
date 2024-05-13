@@ -3,7 +3,10 @@ FROM docker.io/continuumio/miniconda3:24.1.2-0
 
 MAINTAINER Ze_Pedro
 
-##RUN mkdir folder
+#Making Rcache directory, and avaliable:
+RUN mkdir /.Rcache; chmod a+rwX /.Rcache
+
+#RUN mkdir folder
 RUN git clone https://github.com/jppmatos/D4_Portable/
 
 #Set path to work within the packages setup
