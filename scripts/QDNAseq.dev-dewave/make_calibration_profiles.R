@@ -22,14 +22,15 @@ sourceDir("R/") # get deWave local lib
 
 
 #Normals input directory
-in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
+#in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
+in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/TGAC_normals/TGAC_normals_pck/"
 
 #Bin size !!!
 # Change for the disired bin size.
 bin_size <- 1000
 
 #Calibration profiles directory
-out_dir <- "data_ionTurrent/"
+out_dir <- "data_illumina/"
 
 
 #start

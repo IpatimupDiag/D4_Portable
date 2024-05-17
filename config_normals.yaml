@@ -4,8 +4,8 @@ pipeline:
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
 path:
-  dir_bam: "../normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/" # "../IPATIMUP_data/tests/pat10/" # NEW MAIN-INPUT !!!
-  dir_out: "../IPATIMUP_data/tests/tR_normalsPT/" # "../IPATIMUP_data/tests/testResults_newCalibrationPCKALL/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/TGAC_normals/MPS-409/"  # "../normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
+  dir_out: "../TGAC_data/tests_normals/tR_normalsMPS-409/" # "../IPATIMUP_data/tests/testResults_newCalibrationPCKALL/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
   #
   dir_stats: "stats/"
   dir_log: "log/"
