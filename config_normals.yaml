@@ -4,8 +4,8 @@ pipeline:
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
 path:
-  dir_bam: "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/TGAC_normals/MPS-409/"  # "../normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
-  dir_out: "../TGAC_data/tests_normals/tR_normalsMPS-409/" # "../IPATIMUP_data/tests/testResults_newCalibrationPCKALL/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "../IPATIMUP_data/tests/test_colon/" # "/home/jpparrachadematos/new_D4_dir/IPATIMUP_data/tests/test_colon/"  # "../normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
+  dir_out: "../tR_with_ionTurrent_normals/tR_ColonPT/" # "../IPATIMUP_data/tests/testResults_newCalibrationPCKALL/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
   #
   dir_stats: "stats/"
   dir_log: "log/"
@@ -18,11 +18,11 @@ QDNAseq:
   BINSIZES: ["100", "1000"]   #required binsizes comma seperated  1 5 10 15 30 100 1000
   genome: hg19
   chrom_filter: ["Y", "X"] # comma separated quoted to specify which chromosomes to filter out. "X","Y"
-  dewave: False #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
+  dewave: True #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
   dewave_dir: scripts/QDNAseq.dev-dewave/R
   dewave_data: scripts/QDNAseq.dev-dewave/data_ionTurrent/NormalCalibrationSet_{binSize}kb.rda  
-  #scripts/QDNAseq.dev-dewave/data/NormalCalibrationSet_{binSize}kb.rda
-  #dewave_data: data/NormalCalibrationSet_{binSize}kb.rda
+  #dewave_data: scripts/QDNAseq.dev-dewave/data_illumina/NormalCalibrationSet_{binSize}kb.rda
+  #dewave_data: data/NormalCalibrationSet_{binSize}kb.rda # The old original calibration profiles
   minimal_used_reads: 100000
   minimum_cellularity: 0.2  # minimum cellularity used for calling, a to low cellularity cause over calling.
   seg_alpha: 1e-10 #1e-50 # 1e-10 #adjust in case of over-segmentation

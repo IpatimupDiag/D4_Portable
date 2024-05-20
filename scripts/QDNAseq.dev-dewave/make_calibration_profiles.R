@@ -23,14 +23,16 @@ sourceDir("R/") # get deWave local lib
 
 #Normals input directory
 #in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/IPATIMUP_normals/IPATIMUP_normals_packALL/"
-in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/TGAC_normals/TGAC_normals_pck/"
+#in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/TGAC_normals/TGAC_normals_pck/"
+
+in_dir <- "/home/jpparrachadematos/new_D4_dir/normalsData_deWave/mix_normals/"
 
 #Bin size !!!
 # Change for the disired bin size.
-bin_size <- 1000
+bin_size <- 1000 #!!!
 
 #Calibration profiles directory
-out_dir <- "data_illumina/"
+out_dir <- "data_mix/" #!!!
 
 
 #start
@@ -53,7 +55,7 @@ print("Making the calibration profiles:")
 
 # NormalCalibrationSet_100kb !!!
 # Change the bins size in the name of the variable, this is due to the name of the dataset beeing the same as the variable.
-NormalCalibrationSet_1000kb <- createNormalCalibration(copyNumbers)
+NormalCalibrationSet_1000kb <- createNormalCalibration(copyNumbers) #!!!
 
 
 #save calibration profiles
@@ -62,12 +64,8 @@ calibration_set_name <- paste("NormalCalibrationSet_", bin_size, "kb.rda",sep=""
 
 calibration_dir <- paste(out_dir, calibration_set_name,sep="")
 
-# NormalCalibrationSet_100kb !!!
+# NormalCalibrationSet_<n>kb !!!
 # Also change were.
-save(NormalCalibrationSet_1000kb,file=calibration_dir)
-
-#saveRDS(NormalCalibrationSet,calibration_dir)
-
-
+save(NormalCalibrationSet_1000kb,file=calibration_dir) #!!!
 
 print(paste("Done!", calibration_set_name))
