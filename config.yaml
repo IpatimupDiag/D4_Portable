@@ -3,13 +3,19 @@ pipeline:
   THREADS: 4
   suppressMessages: TRUE #options TRUE or FALSE, TRUE for suppressed library messages and warnings of R-packages
 
+#--------------------------------------------------------------------------------------------------------------------
+#
+# Input and Output:
+
 path:
-  dir_bam: "../IPATIMUP_data/A_Ferro/Colon/" #"../TGAC_data/CNP24-001/bam/"
-  dir_out: "../tR_NO_deWaving/tR_Colon/" # "../IPATIMUP_data/tests/testResults_newCalibrationPCKALL/tRLungNL/"  # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "/mnt/shared/input_dir/bam/" #
+  dir_out: "/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
   #
+  #-------------------------------------------
   dir_stats: "stats/"
   dir_log: "log/"
 
+#_______________________________________________________________Advanced_Configurations________________________________________________________________________________________________
 summary:
   profiletypes: ["corrected", "segmented", "called",'dewaved']
 
