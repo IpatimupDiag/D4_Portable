@@ -6,20 +6,31 @@ D4 pipeline, for Copy Number Profiles analysis
 
 ### Run within Podman:
 ```bash
-podman run -v /shared/input_dir:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
+podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
+```
+
+
+**input:**
+```
+/<home_dir>/shared/input_dir/bam/
+```
+
+**output:**
+```
+/<home_dir>/shared/output_dir/resultReport/
 ```
 
 
 ##### Run in interactive mode:
 ```bash
-podman run -it -v /shared/input_dir:/mnt/shared/:z docker.io/ipatimupdiag/d4portable bash
+podman run -it -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable bash
 ```
 ##### Run specific branch:
 ```bash
-podman run -v /shared/input_dir:/mnt/shared/:z docker.io/ipatimupdiag/d4portable:BETAv2.5 snakemake --cores 2 --configfile /mnt/shared/config.yaml
+podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable:BETAv2.5 snakemake --cores 2 --configfile /mnt/shared/config.yaml
 ```
 
 ##### Run with custom config file:
 ```bash
-podman run -v /shared/input_dir:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
+podman run -v <home_dir>//shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
 ```
