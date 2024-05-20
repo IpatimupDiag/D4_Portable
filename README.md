@@ -32,5 +32,5 @@ podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portabl
 
 ##### Run with custom config file:
 ```bash
-podman run -v <home_dir>//shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
+podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
 ```
