@@ -18,7 +18,7 @@ WORKDIR /D4_Portable
 ##install packages from yaml-file
 RUN conda config --set channel_priority flexible
 RUN conda install -c conda-forge mamba
-RUN mamba env update -n base --file env_D4_Portable.yml
+RUN mamba env update -n base --file env_D4_BETA.yml
 
 ##install non-conda R-dependencies
 RUN Rscript r-dependencies.R
