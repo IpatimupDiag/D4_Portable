@@ -63,9 +63,10 @@ QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], al
 #QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], undo.splits='sdundo', undo.SD=SDundo, alpha=alph, transformFun="sqrt") # gives 'Performing segmentation: NA
 
 #original
-#QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds)
+QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds)
 
-QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds, inter=c(-5.0,5.0)) #edited 25/06/24
+#QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds, inter=c(-5.0,5.0)) #edited 25/06/24 
+# -> this was to confirm a segmentation error, currently might just be due to less than 1M  reads avaliable in the profile
 
 saveRDS(QCN.fcnsdsn, segmented)
 
