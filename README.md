@@ -8,6 +8,10 @@ D4 pipeline, for Copy Number Profiles analysis
 ```bash
 podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
 ```
+#### or
+```bash
+podman run -v /<home_dir>/projData:/mnt/shared/input_dir/:z -v /<home_dir>/projReport:/mnt/shared/output_dir/:z  docker.io/ipatimupdiag/d4portable snakemake --cores 2
+```
 
 
 **input:**

@@ -3,7 +3,7 @@ FROM docker.io/continuumio/miniconda3:24.1.2-0
 
 MAINTAINER Ze_Pedro
 
-##Try to solve the problem of snakemake not making dirs:
+##Tries to solve the problem of snakemake not making dirs:
 RUN mkdir /.Rcache; chmod a+rwX /.Rcache
 
 #RUN mkdir folder
@@ -18,7 +18,7 @@ WORKDIR /D4_Portable
 ##install packages from yaml-file
 RUN conda config --set channel_priority flexible
 RUN conda install -c conda-forge mamba
-RUN mamba env update -n base --file env_D4_BETA.yml
+RUN mamba env update -n base --file env_D4_Portable.yml
 
 ##install non-conda R-dependencies
 RUN Rscript r-dependencies.R

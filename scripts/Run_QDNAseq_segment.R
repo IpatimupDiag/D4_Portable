@@ -62,7 +62,10 @@ QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], al
 #original
 #QCN.fcnsds <- segmentBins(QCN.fcnsd[,QCN.fcnsd$used.reads > min_used_reads ], undo.splits='sdundo', undo.SD=SDundo, alpha=alph, transformFun="sqrt") # gives 'Performing segmentation: NA
 
-QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds)
+#original
+#QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds)
+
+QCN.fcnsdsn <- normalizeSegmentedBins(QCN.fcnsds, inter=c(-5.0,5.0)) #edited 25/06/24
 
 saveRDS(QCN.fcnsdsn, segmented)
 
