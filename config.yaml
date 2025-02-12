@@ -48,3 +48,7 @@ ACE:
 
 Clonality:
   reference: scripts/d4-pipeline-master/data/Corrected_Imp_raw_output_Ref08.txt
+  # carcinoma_type: "LUAD" # default
+  # LUAD_reference: LUAD.txt
+  # LUSC_reference: LUSC.txt
+

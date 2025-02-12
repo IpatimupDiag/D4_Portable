@@ -17,7 +17,13 @@ BINSIZES=config["QDNAseq"]["BINSIZES"]
 imagetype=config["ACE"]["imagetype"]
 ACEBINSIZES=config["ACE"]["ACEBINSIZES"]
 setting = config["pipeline"]["setting"]
+
+
 REF_CLONALITY = config["Clonality"]["reference"]
+# CARCINOMA_TYPE = config.get("CARCINOMA_TYPE", config["Clonality"]["carcinoma_type"])
+# REF_LUAD = config["Clonality"]["LUAD_reference"]
+# REF_LUSC = config["Clonality"]["LUSC_reference"]
+
 
 def getnames():
     SAMPLES=dict()
@@ -39,6 +45,7 @@ elif setting == "test_run": # FOR A TEST RUN, STOPS AT rule QDNAseq_segment !!!
     rule test_run:
         input:
             expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES),
+            expand(DIR_OUT + "{binSize}kbp/data/normReadCounts/",binSize=BINSIZES),
             #expand(DIR_OUT + "{binSize}kbp/data/{binSize}kbp-NOdeWave_segmented.rds",binSize=BINSIZES), #get segmented profiles before deWave
             #expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES) #OUTDATED Comment: to compare with and without deWaving
             #expand(DIR_OUT + "{binSize}kbp/ACE/{ploidy}N/segmentfiles/{sample}_segments.tsv", binSize=ACEBINSIZES, ploidy=config["ACE"]["ploidies"], sample=SAMPLES.keys()),
@@ -136,6 +143,22 @@ rule QDNAseq_segment:
     script:
         "scripts/Run_QDNAseq_segment.R"
 
+#-----------------------------------------------------------------------------------------------------------------------------------
+rule table_normReadCounts:
+    input:
+        RDS=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-segmented.rds"
+
+    output:
+        table_out=directory(DIR_OUT + "{binSize}kbp/data/normReadCounts/"),
+
+    params:
+        suppressMessages=config["pipeline"]["suppressMessages"],
+        projname="{binSize}-normReadCounts"
+
+    log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/ProfilesSegment_Info.log"
+    script:
+        "scripts/ProfilesSegment_Info.R"
+
 #----------------------------------------------------------FOR_LUNG_CANCER----------------------------------------------------------
 rule clonality:
     input:
@@ -148,6 +171,8 @@ rule clonality:
         suppressMessages=config["pipeline"]["suppressMessages"],
         projname="{binSize}-Clonality",
         reference=REF_CLONALITY
+        # refrence=REF_LUSC if CARCINOMA_TYPE == "LUSC" else REF_LUAD # Default is adeno-carcinoma.
+ 
     log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/clonality.log"
     script:
         "scripts/d4-pipeline-master/bin/clonality.R"
