@@ -81,6 +81,11 @@ clonTab <- cln$clonTab
 cor <- 1 - clonTab$cor
 clonTab$cor <- cor
 
+clonTab = data.frame(cor = 0.5, llr2 = 0 )
+clonTab
+summary(GMM_model)
+plot(GMM_model)
+
 # Determine GMM clonality 
 model_prediction <- predict(GMM_model,newdata = clonTab, type = 'response')
 Non_clonal_prob <- model_prediction
@@ -92,6 +97,9 @@ if((clonTab$cor > 0.54 & clonTab$llr2 > 0) & Non_clonal_prob > 0.5){
 }else if((clonTab$llr2 < -5 | clonTab$cor < 0.45) & Non_clonal_prob < 0.5){
     outlier <- T
     main <- 'This sample pair is an outlier and possibly clonal'
+}else if((clonTab$llr2 > -5 & clonTab$llr2 < 0) |  (clonTab$cor > 0.45 & clonTab$cor < 0.54)){
+    outlier <- T
+    main <- 'This sample pair is possibly inconclusive'
 }else{
     outlier <- F
     main = ''
