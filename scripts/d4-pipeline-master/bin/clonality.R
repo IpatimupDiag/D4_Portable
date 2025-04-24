@@ -81,11 +81,6 @@ clonTab <- cln$clonTab
 cor <- 1 - clonTab$cor
 clonTab$cor <- cor
 
-clonTab = data.frame(cor = 0.5, llr2 = 0 )
-clonTab
-summary(GMM_model)
-plot(GMM_model)
-
 # Determine GMM clonality 
 model_prediction <- predict(GMM_model,newdata = clonTab, type = 'response')
 Non_clonal_prob <- model_prediction
