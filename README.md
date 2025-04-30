@@ -4,7 +4,7 @@ A clonality identification tool for lung cancer lesions, that runs thru Copy Num
 ## About
 Lung cancer is the leading cause of cancer-related deaths worldwide, often presenting with multiple pulmonary lesions. Synchronous or metachronous lesions complicate treatment decisions, especially when standard diagnostics cannot define their relationships. Distinguishing between metastatic (clonal) and new primary (non-clonal) tumors is crucial for patient management. 
 
-This pipeline implements molecular diagnostics method using DNA copy number alteration (CNA) profiles form shallow whole-genome (sWGS), Ion Torrent technology, to determine the clonality of multiple lung cancer lesions, assisting clinical decision-making.
+This pipeline implements molecular diagnostics method using DNA copy number alteration (CNA) profiles form shallow whole-genome (sWGS), Illumina and Ion Torrent technology, to determine the clonality of multiple lung cancer lesions, assisting clinical decision-making.
 
 
 
