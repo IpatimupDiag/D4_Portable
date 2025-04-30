@@ -41,6 +41,8 @@ report_bmp <- snakemake@output[["report_bmp"]]
 #print(RDS) #DEBUG
 #print(',,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,')
 
+GoldStandard_Data <- read.delim('scripts/d4-pipeline-master/data/TRACERx_GoldStandard_Clonality_Statistics.txt')
+GMM_model <- readRDS('scripts/d4-pipeline-master/data/GMM_model.Rds')
 refData <- read.table(ref,skip=0,fill=TRUE, header=TRUE, sep="\t",quote="")
 
 
@@ -79,17 +81,44 @@ clonTab <- cln$clonTab
 cor <- 1 - clonTab$cor
 clonTab$cor <- cor
 
+# Determine GMM clonality 
+model_prediction <- predict(GMM_model,newdata = clonTab, type = 'response')
+Non_clonal_prob <- model_prediction
+Clonal_prob <-  1 - Non_clonal_prob
+# Check if sample is potential outlier: GMM and twometric don't match
+if((clonTab$cor > 0.54 & clonTab$llr2 > 0) & Non_clonal_prob > 0.5){
+    outlier <- T
+    main <- 'This sample pair is an outlier and possibly non-clonal'
+}else if((clonTab$llr2 < -5 | clonTab$cor < 0.45) & Non_clonal_prob < 0.5){
+    outlier <- T
+    main <- 'This sample pair is an outlier and possibly clonal'
+}else if((clonTab$llr2 > -5 & clonTab$llr2 < 0) |  (clonTab$cor > 0.45 & clonTab$cor < 0.54)){
+    outlier <- T
+    main <- 'This sample pair is possibly inconclusive'
+}else{
+    outlier <- F
+    main = ''
+}
+
 
 #Save profiles and reports:
 png(report_png, height=297, width=210, unit="mm", res=150) #png(paste(pjct, ".report.png", sep="") , height=297, width=210, unit="mm", res=150)
 layout(1:2)
 clonalityReport(cln, labels=cln$clonTab$combination.named)
+# Add gold standard points in the background
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
+# add outlier text if any
+text(x= 50, y = -0.8,main, col = 'red')
 grid.table(clonTab[,c(1,3,4,5)], vp=viewport(x=unit(0.5, "npc"), y=unit(0.25, "npc")))
 dev.off()
 
 bmp(report_bmp, height=297, width=210, unit="mm", res=150)
 layout(1:2)
 clonalityReport(cln, labels=cln$clonTab$combination.named)
+# Add gold standard points in the background
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
+# add outlier text if any
+text(x= 50, y = -0.8,main, col = 'red')
 grid.table(clonTab[,c(1,3,4,5)], vp=viewport(x=unit(0.5, "npc"), y=unit(0.25, "npc")))
 dev.off()
 
