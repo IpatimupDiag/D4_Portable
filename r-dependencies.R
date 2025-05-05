@@ -20,7 +20,10 @@ if (!require("BiocManager", quietly = TRUE))
             install.packages("BiocManager",repos="http://cran.us.r-project.org")
 #BiocManager::install("DNAcopy", version="1.72.3")
 
+##
 BiocManager::install("GenomeInfoDbData")
+BiocManager::install("QDNAseq.hg19")
+##
 
 install.packages("renv", repos='http://cran.us.r-project.org')
 
