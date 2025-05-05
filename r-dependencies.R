@@ -11,12 +11,16 @@
 #This script is for installing remote packages to be used in the R-environment for snakemake
 ##############################################################################
 
+
+
 #install.packages("devtools", version="2.4.5",repos="http://cran.us.r-project.org")
 #options(unzip = 'internal')
 
-#if (!require("BiocManager", quietly = TRUE))
-#            install.packages("BiocManager",repos="http://cran.us.r-project.org")
+if (!require("BiocManager", quietly = TRUE))
+            install.packages("BiocManager",repos="http://cran.us.r-project.org")
 #BiocManager::install("DNAcopy", version="1.72.3")
+
+BiocManager::install("GenomeInfoDbData")
 
 install.packages("renv", repos='http://cran.us.r-project.org')
 
