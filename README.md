@@ -56,7 +56,7 @@ podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portabl
 
 #### Sugestion of a bash script to run D4 Portable
 ```bash
-#!/bin/bash
+#!/bin/sh
 
 inputDir=$1':/mnt/shared/input_dir/bam/:z'
 outputDir=$2':/mnt/shared/output_dir/:z'
@@ -67,6 +67,9 @@ podman run
         -v $outputDir \
         docker.io/ipatimupdiag/d4portable \
         snakemake --cores 2
+```
+```bash
+$ sh run_D4_Portable.sh /{your_path}/{input_dir} /{your_path}/{output_dir}/
 ```
 
 #### Run within conda:
