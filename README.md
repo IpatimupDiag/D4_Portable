@@ -69,7 +69,7 @@ podman run
         snakemake --cores 2
 ```
 ```bash
-$ sh run_D4_Portable.sh /{your_path}/{input_dir} /{your_path}/{output_dir}/
+$ sh run_D4_Portable.sh /{your_path}/{input_dir}/ /{your_path}/{output_dir}/
 ```
 
 #### Run within conda:
