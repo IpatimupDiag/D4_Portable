@@ -21,37 +21,41 @@ Just have podman (version **3.4.4** recommended) installed if you what to run it
 
 #### Run within Podman:
 ```bash
-podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
+podman run -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
 ```
-#### or
+#### or (clear used container at end, and use specific version)
 ```bash
-podman run -v /<home_dir>/projData:/mnt/shared/input_dir/:z -v /<home_dir>/projReport:/mnt/shared/output_dir/:z  docker.io/ipatimupdiag/d4portable snakemake --cores 2
+podman run --rm \
+-v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z \
+-v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z \
+docker.io/ipatimupdiag/d4portable:v1.1 \
+snakemake --cores 2
 ```
 
 
 **input:**
 ```
-/<home_dir>/shared/input_dir/bam/
+/{your_path}/{input_dir}/bam/
 ```
 
 **output:**
 ```
-/<home_dir>/shared/output_dir/resultReport/
+/{your_path}/{output_dir}/:/mnt/shared/output_dir/:z
 ```
 
 
 ##### Run in interactive mode:
 ```bash
-podman run -it -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable bash
+podman run -it -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable bash
 ```
 ##### Run specific branch:
 ```bash
-podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable:BETAv2.5 snakemake --cores 2 --configfile /mnt/shared/config.yaml
+podman run -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable:v1.0 snakemake --cores 2 --configfile /mnt/shared/config.yaml
 ```
 
 ##### Run with custom config file:
 ```bash
-podman run -v /<home_dir>/shared:/mnt/shared/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
+podman run -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2 --configfile /mnt/shared/config.yaml 
 ```
 
 #### Sugestion of a bash script to run D4 Portable
