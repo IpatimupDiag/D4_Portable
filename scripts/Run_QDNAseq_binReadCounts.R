@@ -24,12 +24,41 @@ bin <- as.integer(snakemake@wildcards[["binSize"]])
 genome <- snakemake@params[["genome"]]
 binReadCounts <- snakemake@output[["binReadCounts"]]
 
+selected_bin_100K <- snakemake@params[["CUSTOM_BINS_100K"]]
+selected_bin_1000K <- snakemake@params[["CUSTOM_BINS_1000K"]]
+
 ##############################################################################################################
 # Get bin annotations and bin read counts
 ##############################################################################################################
 #custom bin annotations for chrX used - did this whole script by hand for 100kbp See creationofblacklist.R
-bins <- getBinAnnotations(bin, genome=genome)
 
+
+###
+if (genome == "hg19") {
+        print("Using Custom bins")
+        print("")
+        if (bin == 100){
+                print("Bin_size: 100")
+                print("")
+                bins <- readRDS(selected_bin_100K)
+        } else if (bin == 1000) {
+                print("Bin_size: 1000")
+                print("")
+                bins <- readRDS(selected_bin_1000K)
+        }else{
+                print("Using the original QDNAseq bins")
+                print("The custom bins are limited to 100Kbp and 1000Kbp")
+                print("")
+                bins <- getBinAnnotations(bin, genome=genome)
+     }	
+}else{
+        print("Using the original QDNAseq bins")
+        print("The custom bins are limited to hg19 reference")
+        print("")
+        bins <- getBinAnnotations(bin, genome=genome)
+}
+
+###
 
 QRC <- binReadCounts(bins, bamfiles=bam, cache=TRUE)
 

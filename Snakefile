@@ -14,6 +14,10 @@ DIR_LOG = os.path.join(config["path"]["dir_log"],"")
 
 profiletypes = config["summary"]["profiletypes"]
 BINSIZES=config["QDNAseq"]["BINSIZES"]
+
+CUSTOM_BINS_100K = config["QDNAseq"]["bins_100K"]
+CUSTOM_BINS_1000K = config["QDNAseq"]["bins_1000K"]
+
 imagetype=config["ACE"]["imagetype"]
 ACEBINSIZES=config["ACE"]["ACEBINSIZES"]
 setting = config["pipeline"]["setting"]
@@ -23,7 +27,6 @@ REF_CLONALITY = config["Clonality"]["reference"]
 # CARCINOMA_TYPE = config.get("CARCINOMA_TYPE", config["Clonality"]["carcinoma_type"])
 # REF_LUAD = config["Clonality"]["LUAD_reference"]
 # REF_LUSC = config["Clonality"]["LUSC_reference"]
-
 
 def getnames():
     SAMPLES=dict()
@@ -85,6 +88,8 @@ rule QDNAseq_binReadCounts:
         binReadCounts=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-raw.rds"
     params:
         genome=config["QDNAseq"]["genome"],
+        CUSTOM_BINS_100K=config["QDNAseq"]["bins_100K"],
+        CUSTOM_BINS_1000K=config["QDNAseq"]["bins_1000K"],
         suppressMessages=config["pipeline"]["suppressMessages"]
     log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/binReadCounts.log"
     script:

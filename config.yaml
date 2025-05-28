@@ -8,8 +8,8 @@ pipeline:
 # Input and Output:
 
 path:
-  dir_bam: "/mnt/shared/input_dir/bam/" #
-  dir_out: "/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "../CNP21-001/bam/" #"/mnt/shared/input_dir/bam/" #
+  dir_out: "../CNP21-001/results_2/" #"/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
   #
   #-------------------------------------------
   dir_stats: "stats/"
@@ -23,6 +23,8 @@ summary:
 QDNAseq:
   BINSIZES: ["100", "1000"]   #required binsizes comma seperated  1 5 10 15 30 100 1000
   genome: hg19
+  bins_100K: scripts/data_bins/Filterd_hg19_100Kbins_Cutoff_4.rds
+  bins_1000K: scripts/data_bins/Filterd_hg19_1000Kbins_Cutoff_4.rds
   chrom_filter: ["Y", "X"] # comma separated quoted to specify which chromosomes to filter out. "X","Y"
   dewave: False #dewaving is an optional setting, if True samples will be dewaved before segmentation, if False dewaving will be skipped.
   dewave_dir: scripts/QDNAseq.dev-dewave/R
