@@ -8,8 +8,8 @@ pipeline:
 # Input and Output:
 
 path:
-  dir_bam: "../CNP21-001/bam/" #"/mnt/shared/input_dir/bam/" #
-  dir_out: "../CNP21-001/results_2/" #"/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "/mnt/shared/input_dir/bam/" #
+  dir_out: "/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
   #
   #-------------------------------------------
   dir_stats: "stats/"
@@ -47,6 +47,8 @@ ACE:
   printsummaries: FALSE  #options: TRUE, FALSE or 2, TRUE is only possible for less than ~ 50 samples. 2 means that only the errorplots are in a summary file.
   ACEBINSIZES: [100, 1000] #required binsizes comma seperated 15 30 100 1000, be careful not to ask for binsizes not created by QDNAseq. Smaller binsizes are computationally harder.
 
+GeneRuler:
+  geneListCSV: "scripts/data_GeneRuler/GenesRuler_hg19-Ensembl_allGenes.csv"
 
 Clonality:
   reference: scripts/d4-pipeline-master/data/Corrected_Imp_raw_output_Ref08.txt

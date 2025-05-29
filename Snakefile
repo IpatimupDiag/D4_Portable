@@ -47,8 +47,9 @@ if setting == "service": #rule service
 elif setting == "test_run": # FOR A TEST RUN, STOPS AT rule QDNAseq_segment !!!
     rule test_run:
         input:
-            expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES),
+            expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}Kbp_Bin.report.png",binSize=BINSIZES),
             expand(DIR_OUT + "{binSize}kbp/data/normReadCounts/",binSize=BINSIZES),
+            expand(DIR_OUT + "{binSize}kbp/data/GeneRuler_Info/",binSize=BINSIZES),
             #expand(DIR_OUT + "{binSize}kbp/data/{binSize}kbp-NOdeWave_segmented.rds",binSize=BINSIZES), #get segmented profiles before deWave
             #expand(DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",binSize=BINSIZES) #OUTDATED Comment: to compare with and without deWaving
             #expand(DIR_OUT + "{binSize}kbp/ACE/{ploidy}N/segmentfiles/{sample}_segments.tsv", binSize=ACEBINSIZES, ploidy=config["ACE"]["ploidies"], sample=SAMPLES.keys()),
@@ -158,11 +159,27 @@ rule table_normReadCounts:
 
     params:
         suppressMessages=config["pipeline"]["suppressMessages"],
-        projname="{binSize}-normReadCounts"
+        projname="{binSize}Kbp_Bin-normReadCounts"
 
     log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/ProfilesSegment_Info.log"
     script:
         "scripts/ProfilesSegment_Info.R"
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+rule geneRuler:
+    input:
+        RDS=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-segmented.rds"
+
+    output:
+        profiles_path=directory(DIR_OUT + "{binSize}kbp/data/GeneRuler_Info/"), 
+
+    params:
+        suppressMessages=config["pipeline"]["suppressMessages"],
+        genes_list=config["GeneRuler"]["geneListCSV"]
+
+    log: DIR_OUT + DIR_LOG + "QDNAseq/{binSize}kbp/geneRuler_Info.log"
+    script:
+        "scripts/geneRuler.R"
 
 #----------------------------------------------------------FOR_LUNG_CANCER----------------------------------------------------------
 rule clonality:
@@ -170,11 +187,11 @@ rule clonality:
         RDS=DIR_OUT + "{binSize}kbp/data/{binSize}kbp-segmented.rds"
     output:
         profiles=directory(DIR_OUT + "{binSize}kbp/data/Clonality/"),
-        report_png=DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.png",
-        report_bmp=DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}.report.bmp"
+        report_png=DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}Kbp_Bin.report.png",
+        report_bmp=DIR_OUT + "{binSize}kbp/data/Clonality/{binSize}Kbp_Bin.report.bmp"
     params:
         suppressMessages=config["pipeline"]["suppressMessages"],
-        projname="{binSize}-Clonality",
+        projname="{binSize}Kbp_Bin-Clonality",
         reference=REF_CLONALITY
         # refrence=REF_LUSC if CARCINOMA_TYPE == "LUSC" else REF_LUAD # Default is adeno-carcinoma.
  

@@ -1,6 +1,19 @@
-library(Biobase)
-library(QDNAseq)
+#!/usr/bin/env Rscript
+##############################################################################################################
+# script for QDNAseq profiles, check postion of the segments and their log2 read count 
+# date: May 2025
+##############################################################################################################
 
+msg <- snakemake@params[["suppressMessages"]]
+if (msg){
+suppressMessages(library(QDNAseq))
+suppressMessages(library(Biobase))
+} else{
+library(QDNAseq)
+library(Biobase)
+}
+
+#
 options(scipen = 999) #disabling scientific notation
 
 #============================================================================
