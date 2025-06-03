@@ -4,15 +4,31 @@
 # date: May 2025
 ##############################################################################################################
 
-msg <- snakemake@params[["suppressMessages"]]
-if (msg){
-suppressMessages(library(QDNAseq))
-suppressMessages(library(Biobase))
-} else{
-library(QDNAseq)
-library(Biobase)
-}
 
+
+#----------------------------------INPUT/OUTPUT-------------------------------------------------------------------------
+# consider if is runinng in a snakemake pipeline.
+if (exists("snakemake")){
+	msg <- snakemake@params[["suppressMessages"]]
+	if (msg){
+		suppressMessages(library(QDNAseq))
+		suppressMessages(library(Biobase))
+	} else{
+		library(QDNAseq)
+		library(Biobase)
+	}
+	input_QDNAseq <- snakemake@input[["RDS"]]
+	profiles_dir <- snakemake@output[["profiles_path"]]
+	file_OncoGenesList <- snakemake@params[["genes_list"]]
+}else{
+	library(QDNAseq)
+	library(Biobase)
+	args = commandArgs(trailingOnly=TRUE)
+	input_QDNAseq <- args[1] # INPUT # ex: "./test_Case/100kbp-segmented.rds" # Getting the copy number profiles:
+	profiles_dir <- args[2] # OUTPUT # ex: "./.../GeneRuler_Info/"
+	file_OncoGenesList <- "data_GeneRuler/GenesRuler_hg19-Ensembl_allGenes.csv"
+}
+#----------------------------------------------------------------------------------------------------------------------
 #---------------------------------------Functions:--------------------------------------------------
 Find_Starting_Bin <- function(chromosome=22,profile){
 	#Count to total of bins from the start util to the selected chr
@@ -101,19 +117,7 @@ GeneBookmark <- function(gene_name,gene_str,gene_end,gene_col,gene_level,start_b
 
 #---------------------------------------\Functions:--------------------------------------------------
 
-#----------------------------------INPUT/OUTPUT-------------------------------------------------------------------------
-# consider if is runinng in a snakemake pipeline.
-if (exists("snakemake")){
-	input_QDNAseq <- snakemake@input[["RDS"]]
-	profiles_dir <- snakemake@output[["profiles_path"]]
-	file_OncoGenesList <- snakemake@params[["genes_list"]]
-}else{
-	args = commandArgs(trailingOnly=TRUE)
-	input_QDNAseq <- args[1] # INPUT # ex: "./test_Case/100kbp-segmented.rds" # Getting the copy number profiles:
-	profiles_dir <- args[2] # OUTPUT # ex: "./.../GeneRuler_Info/"
-	file_OncoGenesList <- "data_GeneRuler/GenesRuler_hg19-Ensembl_allGenes.csv"
-}
-#----------------------------------------------------------------------------------------------------------------------
+
 #----------------------------------------------------------------------------------------
 # Read the OncoGenes list from a csv file:
 df_OncoGenes <- read.csv(file_OncoGenesList, header=1,sep=",")
