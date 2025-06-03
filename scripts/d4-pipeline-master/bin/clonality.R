@@ -106,7 +106,9 @@ png(report_png, height=297, width=210, unit="mm", res=150) #png(paste(pjct, ".re
 layout(1:2)
 clonalityReport(cln, labels=cln$clonTab$combination.named)
 # Add gold standard points in the background
-points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 19,19,19), cex=0.08, col =rgb(0, 0, 0, 0.3))
+
+#points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
 # add outlier text if any
 text(x= 50, y = -0.8,main, col = 'red')
 grid.table(clonTab[,c(1,3,4,5)], vp=viewport(x=unit(0.5, "npc"), y=unit(0.25, "npc")))
@@ -116,7 +118,9 @@ bmp(report_bmp, height=297, width=210, unit="mm", res=150)
 layout(1:2)
 clonalityReport(cln, labels=cln$clonTab$combination.named)
 # Add gold standard points in the background
-points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 19,19,19), cex=0.08, col =rgb(0, 0, 0, 0.3))
+
+#points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
 # add outlier text if any
 text(x= 50, y = -0.8,main, col = 'red')
 grid.table(clonTab[,c(1,3,4,5)], vp=viewport(x=unit(0.5, "npc"), y=unit(0.25, "npc")))
