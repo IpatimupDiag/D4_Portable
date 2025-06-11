@@ -38,10 +38,10 @@ custom_hg19_1000Kbp <- snakemake@params[["CUSTOM_BINS_1000K"]]
 if (genome=="hg19") {
         if (bin==100) {
                 print("Using custom 100Kpb hg19 bins !")
-                bins <- custom_hg19_100Kbp
+                bins <- readRDS(custom_hg19_100Kbp)
         } else if (bin==1000){
                 print("Using custom 1000Kpb hg19 bins !")
-	        bins <- custom_hg19_1000Kbp
+	        bins <- readRDS(custom_hg19_1000Kbp)
 	}
 } else {
         print("Using original bins !")
