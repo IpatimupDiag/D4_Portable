@@ -74,7 +74,7 @@ makeSegmentationTable <- function(profile){
     }
   
     # Store the merged interval
-    df_result <- rbind(df_result, data.frame(Chr = chr, Segment_Start = start, Segment_End = end, Segment_NormReadCount = seg_var))
+    df_result <- rbind(df_result, data.frame(Chr = chr, Start = start, End = end, Segment_NormLog2ReadCount = seg_var))
   
     i <- i + 1
   }
