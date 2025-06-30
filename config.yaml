@@ -8,8 +8,8 @@ pipeline:
 # Input and Output:
 
 path:
-  dir_bam: "/mnt/shared/input_dir/bam/" #
-  dir_out: "/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
+  dir_bam: "../CNP21-001/bam/" #"/mnt/shared/input_dir/bam/" #
+  dir_out: "../CNP21-001/results_dev1_3/" #"/mnt/shared/output_dir/resultReport/" # directory where the output should be created, all other directories below are branches of this directory
   #-------------------------------------------
   dir_stats: "stats/"
   dir_log: "log/"
