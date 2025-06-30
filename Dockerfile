@@ -10,7 +10,8 @@ RUN mkdir /.Rcache; chmod a+rwX /.Rcache
 
 ##Clone D4_Portable pipeline
 #RUN git clone --single-branch --branch BETAv2.4 https://github.com/IpatimupDiag/D4_Portable/
-RUN git clone https://github.com/IpatimupDiag/D4_Portable/
+#RUN git clone https://github.com/IpatimupDiag/D4_Portable/
+RUN git clone --single-branch --branch v1.2 https://github.com/IpatimupDiag/D4_Portable/
 
 ##Set path to work within the packages setup
 WORKDIR /D4_Portable
