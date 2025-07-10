@@ -94,8 +94,8 @@ if((clonTab$cor > 0.54 & clonTab$llr2 > 0) & Non_clonal_prob > 0.5){
     main <- 'This sample pair is an outlier and possibly clonal'
 #}else if((clonTab$llr2 > -5 & clonTab$llr2 < 0) & (clonTab$cor > 0.45 & clonTab$cor < 0.54)){
 }else if((clonTab$llr2 >= -5 & (clonTab$cor >= 0.45 & clonTab$cor <= 0.54)) | (clonTab$cor >= 0.45 & (clonTab$llr2 >= -5 & clonTab$llr2 <= 0))){
-    outlier <- T
-    main <- 'This sample pair is possibly inconclusive'
+    outlier <- F
+    main <- ''
 }else{
     outlier <- F
     main = ''
