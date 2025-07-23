@@ -18,7 +18,7 @@ msg <- snakemake@params[["suppressMessages"]]
 library(devtools)
 
 if(!require("QDNAseq.dev"))
-	devtools::install_github("tgac-vumc/QDNAseq.dev", ref="clonality",force=TRUE)
+	devtools::install_github("IpatimupDiag/QDNAseq.dev", ref="clonality",force=TRUE)
 
 library(QDNAseq.dev)
 library(Biobase)
@@ -101,15 +101,18 @@ if((clonTab$cor > 0.54 & clonTab$llr2 > 0) & Non_clonal_prob > 0.5){
     main = ''
 }
 
+# Display Two-metric evaluation results:
+print("Clonality Two-metric evaluation results:") 
+print(paste0("LLR2: ",cln$clonTab$llr2)) 
+print(paste0("Corr: ",1 - cln$clonTab$cor)) 
 
 #Save profiles and reports:
 png(report_png, height=297, width=210, unit="mm", res=150) #png(paste(pjct, ".report.png", sep="") , height=297, width=210, unit="mm", res=150)
 layout(1:2)
-clonalityReport(cln, labels=cln$clonTab$combination.named)
+clonalityReport(cln, labels=cln$clonTab$combination.named, dotcol="#e31732")
 # Add gold standard points in the background
-points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 19,19,19), cex=0.05, col =rgb(0, 0, 0, 0.3))
-
-#points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
+## inv triangle is clonal, X is non-clonal
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,6,7), cex=0.4, col =rgb(0, 0, 0, 0.3))
 # add outlier text if any
 text(x= 50, y = -0.8,main, col = 'red')
 grid.table(clonTab[,c(1,3,4,5)], vp=viewport(x=unit(0.5, "npc"), y=unit(0.25, "npc")))
@@ -117,9 +120,10 @@ dev.off()
 
 bmp(report_bmp, height=297, width=210, unit="mm", res=150)
 layout(1:2)
-clonalityReport(cln, labels=cln$clonTab$combination.named)
+clonalityReport(cln, labels=cln$clonTab$combination.named, dotcol="#e31732")
 # Add gold standard points in the background
-points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 19,19,19), cex=0.05, col =rgb(0, 0, 0, 0.3))
+## inv triangle is clonal, X is non-clonal
+points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,6,7), cex=0.4, col =rgb(0, 0, 0, 0.3))
 
 #points(GoldStandard_Data$llr2,GoldStandard_Data$cor,  pch=ifelse(as.integer(as.factor(GoldStandard_Data$clonality)) == 1,4,6), cex=1, col =rgb(0, 0, 0, 0.3))
 # add outlier text if any
