@@ -21,14 +21,14 @@ Just have podman (version **3.4.4** recommended) installed if you what to run it
 
 #### Run within Podman:
 ```bash
-podman run -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable snakemake --cores 2
+podman run -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z docker.io/ipatimupdiag/d4portable:latest snakemake --cores 2
 ```
 #### or (clear used container at end, and use specific version)
 ```bash
 podman run --rm \
 -v /{your_path}/{input_dir}/bam/:/mnt/shared/input_dir/bam/:z \
 -v /{your_path}/{output_dir}/:/mnt/shared/output_dir/:z \
-docker.io/ipatimupdiag/d4portable:v1.1 \
+docker.io/ipatimupdiag/d4portable:latest \
 snakemake --cores 2
 ```
 
